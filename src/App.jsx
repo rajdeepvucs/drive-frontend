@@ -256,16 +256,17 @@ export default function App() {
 
         const targetFolderId = currentFolderId; // Use the current folder
         const formData = new FormData();
-        formData.append('file', fileToUpload);
         formData.append('folderId', targetFolderId); // Send null if root
+        formData.append('file', fileToUpload);
+       
 
         setIsLoading(true);
         try {
-            await axios.post(`${API_BASE_URL}/api/files/upload`, formData, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } });
+            await axios.post(`${API_BASE_URL}/api/files/upload/`, formData, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } });
             toast.success(`File '${fileToUpload.name}' uploaded.`);
             setFileToUpload(null);
             if(document.getElementById('file-upload-input')) document.getElementById('file-upload-input').value = null; // Reset input visually
-            fetchItems(targetFolderIdnull); // Refetch current folder
+            fetchItems(targetFolderId); // Refetch current folder
         } catch (err) {
             toast.error(err.response?.data?.message || 'File upload failed.');
             console.error('Upload error:', err.response?.data || err.message || err);
